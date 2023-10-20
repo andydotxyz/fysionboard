@@ -2,6 +2,11 @@ package main
 
 import (
 	"errors"
+	"image/color"
+	"io"
+	"path/filepath"
+	"strings"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -9,10 +14,6 @@ import (
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"image/color"
-	"io/ioutil"
-	"path/filepath"
-	"strings"
 )
 
 type board struct {
@@ -89,7 +90,7 @@ func (f *fysion) showAddFile() {
 		}
 
 		defer r.Close()
-		b, err := ioutil.ReadAll(r)
+		b, err := io.ReadAll(r)
 		name := r.URI().Name()
 
 		switch strings.ToLower(filepath.Ext(name)) {

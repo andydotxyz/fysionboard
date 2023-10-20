@@ -1,10 +1,11 @@
 package main
 
 import (
+	"math"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/theme"
-	"math"
 )
 
 const minColWidth = float32(240)

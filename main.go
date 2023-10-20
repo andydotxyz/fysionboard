@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	a := app.NewWithID("xyz.andy.fysion")
-	w := a.NewWindow("Fysion")
+	a := app.NewWithID("xyz.andy.fysionboard")
+	w := a.NewWindow("FysionBoard")
 
 	f := &fysion{win: w}
 	w.SetContent(f.buildUI())

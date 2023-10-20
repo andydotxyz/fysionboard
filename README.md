@@ -2,6 +2,6 @@
 
 Gather images, thoughts and mood together in this app.
 
-> *This is very early and does not load or save files etc* 
+> *This is very early but I welcome feedback* 
 
 ![screenshot](img/screenshot.png)

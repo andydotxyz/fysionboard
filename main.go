@@ -5,13 +5,12 @@ import (
 	"fyne.io/fyne/v2/app"
 )
 
-const boardID = "default"
-
 func main() {
 	a := app.NewWithID("xyz.andy.fysionboard")
 	w := a.NewWindow("FysionBoard")
 
-	f := &fysion{app: a, win: w}
+	boardID := a.Preferences().StringWithFallback("currentID", "default")
+	f := &fysion{app: a, win: w, id: boardID}
 	w.SetContent(f.buildUI())
 	w.Resize(fyne.NewSize(minColWidth*1.5, minColWidth*2.5))
 

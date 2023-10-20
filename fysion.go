@@ -25,6 +25,7 @@ type board struct {
 type fysion struct {
 	top *board
 	app fyne.App
+	id  string
 
 	title *widget.RichText
 	body  *fyne.Container
@@ -83,10 +84,13 @@ func (f *fysion) buildUI() fyne.CanvasObject {
 					return
 				}
 				f.title.ParseMarkdown("# " + input.Text)
-				f.app.Preferences().SetString(boardID+".name", input.Text)
+				f.app.Preferences().SetString(f.id+".name", input.Text)
 			}, f.win)
 	})
-	top := container.NewBorder(nil, nil, nil, container.NewHBox(edit, add),
+
+	back := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {}) // TODO go back to multiple board screen
+	back.Disable()
+	top := container.NewBorder(nil, nil, back, container.NewHBox(edit, add),
 		container.NewCenter(f.title))
 
 	return container.NewBorder(top, nil, nil, nil,
@@ -135,9 +139,9 @@ func (f *fysion) showAddColor() {
 				return
 			}
 			f.addColor(c)
-			list := f.app.Preferences().StringList(boardID + ".items")
+			list := f.app.Preferences().StringList(f.id + ".items")
 			list = append(list, "color://"+formatColor(c))
-			f.app.Preferences().SetStringList(boardID+".items", list)
+			f.app.Preferences().SetStringList(f.id+".items", list)
 		}, f.win)
 }
 
@@ -152,9 +156,9 @@ func (f *fysion) showAddFile() {
 		}
 
 		f.addFile(r.URI().Name(), r)
-		list := f.app.Preferences().StringList(boardID + ".items")
+		list := f.app.Preferences().StringList(f.id + ".items")
 		list = append(list, r.URI().String())
-		f.app.Preferences().SetStringList(boardID+".items", list)
+		f.app.Preferences().SetStringList(f.id+".items", list)
 	}, f.win)
 	o.SetFilter(storage.NewExtensionFileFilter([]string{".png", ".jpeg", ".jpg", ".txt"}))
 	o.Show()
@@ -171,9 +175,9 @@ func (f *fysion) showAddText() {
 				return
 			}
 			f.addText(input.Text)
-			list := f.app.Preferences().StringList(boardID + ".items")
+			list := f.app.Preferences().StringList(f.id + ".items")
 			list = append(list, input.Text)
-			f.app.Preferences().SetStringList(boardID+".items", list)
+			f.app.Preferences().SetStringList(f.id+".items", list)
 		}, f.win)
 }
 

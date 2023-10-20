@@ -4,6 +4,7 @@ import (
 	"errors"
 	"image/color"
 	"io"
+	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -64,6 +65,13 @@ func (f *fysion) addText(text string) {
 	f.body.Add(r)
 }
 
+func (f *fysion) addURL(link string) {
+	u, _ := url.Parse(link)
+	h := widget.NewHyperlink(link, u)
+	h.Truncation = fyne.TextTruncateEllipsis
+	f.body.Add(h)
+}
+
 func (f *fysion) buildUI() fyne.CanvasObject {
 	f.title = widget.NewRichTextFromMarkdown("# Untitled")
 	f.body = container.New(&layout{})
@@ -118,6 +126,8 @@ func (f *fysion) setBoard(title string, items []string) {
 		case "color":
 			c := parseColor(item[8:]) // strip the color://
 			f.addColor(c)
+		case "http", "https":
+			f.addURL(item)
 		default:
 			f.addText(item)
 		}
@@ -128,7 +138,8 @@ func (f *fysion) showAdd(p fyne.Position) {
 	m := fyne.NewMenu("Add",
 		fyne.NewMenuItem("File", f.showAddFile),
 		fyne.NewMenuItem("Text", f.showAddText),
-		fyne.NewMenuItem("Color", f.showAddColor))
+		fyne.NewMenuItem("Color", f.showAddColor),
+		fyne.NewMenuItem("URL", f.showAddURL))
 	widget.ShowPopUpMenuAtPosition(m, f.win.Canvas(), p)
 }
 
@@ -175,6 +186,24 @@ func (f *fysion) showAddText() {
 				return
 			}
 			f.addText(input.Text)
+			list := f.app.Preferences().StringList(f.id + ".items")
+			list = append(list, input.Text)
+			f.app.Preferences().SetStringList(f.id+".items", list)
+		}, f.win)
+}
+
+func (f *fysion) showAddURL() {
+	input := widget.NewMultiLineEntry()
+	dialog.ShowForm("Add a file from a URL", "Add", "Cancel",
+		[]*widget.FormItem{
+			widget.NewFormItem("File URL", input),
+		},
+		func(ok bool) {
+			if !ok {
+				return
+			}
+
+			f.addURL(input.Text)
 			list := f.app.Preferences().StringList(f.id + ".items")
 			list = append(list, input.Text)
 			f.app.Preferences().SetStringList(f.id+".items", list)

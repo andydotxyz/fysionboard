@@ -1,4 +1,4 @@
-module github.com/andydotxyz/fysion
+module github.com/andydotxyz/fysionboard
 
 go 1.15
 

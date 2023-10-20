@@ -1,4 +1,4 @@
-# Fysion - a Fyne based vision board
+# FysionBoard - a Fyne based vision board
 
 Gather images, thoughts and mood together in this app.
 
